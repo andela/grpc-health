@@ -19,7 +19,6 @@ var (
 	serviceName  string        = ""
 	port         string        = ":8080"
 	timeoutDur   time.Duration = time.Second
-	Version      string        = "DEV"
 )
 
 func connectToRemote() {
@@ -73,7 +72,6 @@ func main() {
 		Addr:    port,
 		Handler: mux,
 	}
-	glog.Infof("Starting grpc-health version=%s", Version)
 	glog.Infof("Binding to %s...", httpsrv.Addr)
 	glog.Fatal(httpsrv.ListenAndServe())
 }
