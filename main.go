@@ -66,7 +66,7 @@ func main() {
 
 	connectToRemote()
 	mux := http.NewServeMux()
-	mux.HandleFunc("/health", handleHealthCheck)
+	mux.HandleFunc("/", handleHealthCheck)
 
 	httpsrv := &http.Server{
 		Addr:    port,

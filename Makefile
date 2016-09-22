@@ -4,7 +4,7 @@ BUILD_DATE=$(shell date +%Y%m%d-%H%M%S)
 
 TAG = $(SHA_COMMIT)-$(NUMBER_OF_COMMIT)
 PROJECT = microservices-kube
-IMAGE = grpc_health
+IMAGE = health_check
 HEALTH_IMAGE = us.gcr.io/$(PROJECT)/$(IMAGE):$(TAG)
 
 all: run
