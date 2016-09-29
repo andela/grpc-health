@@ -61,12 +61,12 @@ func handleHealthCheck(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	if p := os.Getenv("PORT"); p != "" {
-		port = ":" + p
+		port = p
 	}
 
 	connectToRemote()
 	mux := http.NewServeMux()
-	mux.HandleFunc("/health", handleHealthCheck)
+	mux.HandleFunc("/", handleHealthCheck)
 
 	httpsrv := &http.Server{
 		Addr:    port,

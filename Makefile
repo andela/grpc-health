@@ -4,7 +4,7 @@ BUILD_DATE=$(shell date +%Y%m%d-%H%M%S)
 
 TAG = $(SHA_COMMIT)-$(NUMBER_OF_COMMIT)
 PROJECT = microservices-kube
-IMAGE = grpc_health
+IMAGE = health_check
 HEALTH_IMAGE = us.gcr.io/$(PROJECT)/$(IMAGE):$(TAG)
 
 all: run
@@ -12,13 +12,14 @@ all: run
 build:
 	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o artifact .
 
-image: 
+image: build
+	eval $$(minikube docker-env) && \
 	docker build -t $(HEALTH_IMAGE) -t us.gcr.io/$(PROJECT)/$(IMAGE):latest .
 
 push: image
 	gcloud docker push $(HEALTH_IMAGE)
 
-minikube: 
+minikube: build
 	eval $$(minikube docker-env) && docker build -t us.gcr.io/$(PROJECT)/$(IMAGE):minikube .
 
 
