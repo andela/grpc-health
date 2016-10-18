@@ -13,7 +13,7 @@ build:
 	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o artifact .
 
 image: build
-	eval $$(minikube docker-env) && \
+	eval $$(minikube docker-env) && 
 	docker build -t $(HEALTH_IMAGE) -t us.gcr.io/$(PROJECT)/$(IMAGE):latest .
 
 push: image
