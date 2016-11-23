@@ -61,7 +61,7 @@ func handleHealthCheck(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	if p := os.Getenv("PORT"); p != "" {
-		port = ":" + p
+		port = p
 	}
 
 	connectToRemote()
