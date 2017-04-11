@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/golang/glog"
+	"github.com/inconshreveable/log15"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
@@ -19,6 +20,7 @@ var (
 	serviceName  string        = ""
 	port         string        = ":8080"
 	timeoutDur   time.Duration = time.Second
+	logger                     = log15.New("context", "HealthCheck")
 )
 
 func connectToRemote() {
@@ -43,20 +45,20 @@ func handleHealthCheck(w http.ResponseWriter, r *http.Request) {
 	if healthClient == nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprint(w, "NOT_HEALTHY")
-		glog.Errorf("server is not healthy, unable to connect remote grpc server")
+		logger.Error("server is not healthy, unable to connect remote grpc server")
 		return
 	}
 	ctx, _ := context.WithTimeout(context.Background(), timeoutDur)
 	resp, err := healthClient.Check(ctx, &healthpb.HealthCheckRequest{Service: serviceName})
 	if err == nil && resp.Status == healthpb.HealthCheckResponse_SERVING {
 		w.WriteHeader(http.StatusOK)
-		fmt.Fprint(w, "OK")
-		glog.Infof("health check is OK")
+		fmt.Fprint(w, "HEALTHY")
+		logger.Info("health check is OK")
 		return
 	}
 	w.WriteHeader(http.StatusInternalServerError)
 	fmt.Fprint(w, "NOT_HEALTHY")
-	glog.Errorf("server is not healthy err=%v response=%v", err, resp)
+	logger.Error("server is not healthy err=%v response=%v", err, resp)
 }
 
 func main() {
@@ -66,7 +68,7 @@ func main() {
 
 	connectToRemote()
 	mux := http.NewServeMux()
-	mux.HandleFunc("/health", handleHealthCheck)
+	mux.HandleFunc("/", handleHealthCheck)
 
 	httpsrv := &http.Server{
 		Addr:    port,
