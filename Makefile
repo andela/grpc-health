@@ -3,7 +3,7 @@ SHA_COMMIT= $(shell git rev-parse --short HEAD)
 BUILD_DATE=$(shell date +%Y%m%d-%H%M%S)
 
 TAG = $(SHA_COMMIT)-$(NUMBER_OF_COMMIT)
-PROJECT = andela-kube
+PROJECT = microservices-kube
 IMAGE = health_check
 HEALTH_IMAGE = us.gcr.io/$(PROJECT)/$(IMAGE)
 

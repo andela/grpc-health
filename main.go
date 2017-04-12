@@ -20,7 +20,7 @@ var (
 	serviceName  string        = ""
 	port         string        = ":8080"
 	timeoutDur   time.Duration = time.Second
-	logger                     = log15.New("context", "HealthCheck")
+	logger       log15.Logger
 )
 
 func connectToRemote() {
@@ -66,6 +66,11 @@ func main() {
 		port = ":" + p
 	}
 
+	if pod := os.Getenv("POD_NAME"); pod != "" {
+		serviceName = pod
+	}
+
+	logger = log15.New("context", "HealthCheck", "podName", serviceName)
 	connectToRemote()
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", handleHealthCheck)
