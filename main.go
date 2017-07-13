@@ -62,7 +62,7 @@ func handleHealthCheck(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	if p := os.Getenv("PORT"); p != "" {
+	if p := os.Getenv("HEALTH_CHECK_PORT"); p != "" {
 		port = ":" + p
 	}
 
